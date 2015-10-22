@@ -97,7 +97,7 @@
       initFileFn: null,
       readFileFn: webAPIFileRead
     };
-    
+
     /**
      * Current options
      * @type {Object}
@@ -392,7 +392,10 @@
           // event listener is executed two times
           // first one - original mouse click event
           // second - input.click(), input is inside domNode
-          domNode.addEventListener('click', function() {
+          domNode.addEventListener('click', function(event) {
+            if (event.target === input) {
+                return;
+            }
             input.click();
           }, false);
         }
@@ -702,7 +705,7 @@
      * @type {Flow}
      */
     this.flowObj = flowObj;
-    
+
     /**
      * Used to store the bytes read
      * @type {Blob|string}
@@ -1616,4 +1619,4 @@
       define( "flow", [], function () { return Flow; } );
     }
   }
-})(window, document);
+})(window, document, void 0);
