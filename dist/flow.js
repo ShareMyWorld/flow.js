@@ -1156,7 +1156,8 @@
      * Chunk end byte in a file
      * @type {number}
      */
-    this.endByte = Math.min(this.fileObj.size, (this.offset + 1) * this.chunkSize);
+    this.endByte = 0;
+    this.calculateEndByte();
 
     /**
      * XMLHttpRequest
@@ -1292,6 +1293,16 @@
     preprocessFinished: function () {
       // Compute the endByte after the preprocess function to allow an
       // implementer of preprocess to set the fileObj size
+      this.calculateEndByte();
+      this.preprocessState = 2;
+      this.send();
+    },
+
+    /**
+     * Calculate the end byte of this chunk
+     * @function
+     */
+    calculateEndByte: function() {
       this.endByte = Math.min(this.fileObj.size, (this.offset + 1) * this.chunkSize);
       if (this.fileObj.size - this.endByte < this.chunkSize &&
           !this.flowObj.opts.forceChunkSize) {
@@ -1299,8 +1310,6 @@
         // but less than 2*this.chunkSize
         this.endByte = this.fileObj.size;
       }
-      this.preprocessState = 2;
-      this.send();
     },
 
     /**
